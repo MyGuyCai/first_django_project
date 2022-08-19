@@ -1,10 +1,16 @@
-from django.conf import settings
+from .models import Project
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+import pandas as pd
+from plotly.offline import plot
+import plotly.express as px
 
 
 def index(request):
     context = {}
+
+
+    # uploading files
     if request.method == 'POST':
         context = {}
         uploaded_file = request.FILES['document']
@@ -12,5 +18,26 @@ def index(request):
         fs = FileSystemStorage()
         name = fs.save(uploaded_file.name, uploaded_file)
         context['url'] = fs.url(name)
+
+
+    # view graph
+    qs = Project.objects.all()
+    projects_data = [
+        {
+            'Project': x.name,
+            'Start': x.start_date,
+            'Finish': x.end_date,
+            'Responsible': x.responsible.username
+        } for x in qs
+    ]
+    df = pd.DataFrame(projects_data)
+
+    fig = px.timeline(
+        df, x_start="Start", x_end="Finish", y="Project", color="Responsible"
+    )
+
+    fig.update_yaxes(autorange="reversed")
+    gantt_plot = plot(fig, output_type="div")
+    context['plot_div'] = gantt_plot
 
     return render(request, 'graph_index.html', context)

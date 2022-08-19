@@ -5,7 +5,7 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.index, name='graphing_index'),
+    path('', views.index, name='graphing_index')
 ]
 
 if settings.DEBUG:

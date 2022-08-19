@@ -25,5 +25,8 @@
             <p>File uploaded.</p>
         {% endif %}
     </h3>
+    {% autoescape off %}
+    {{ plot_div }}
+    {% endautoescape %}
     {% endblock %}
 </body>
