@@ -14,9 +14,16 @@
         <p style="text-align:center;"> Welcome to the graphing section
         </p>
     </h2>
-    <h3>
-        <p style="text-align:left;"> graph and options to appear here
-        </p>
+    <h3 style="text-align:center;">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="document">
+            <button type="submit">Upload</button>
+        </form>
+
+        {% if url %}
+            <p>File uploaded.</p>
+        {% endif %}
     </h3>
-	{% endblock %}
+    {% endblock %}
 </body>
